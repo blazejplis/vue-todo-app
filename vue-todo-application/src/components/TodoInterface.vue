@@ -18,8 +18,9 @@
         </li>
       </ul>
       <button class="toggleButton" v-if="state.TodosArray.length" @click="toggleAllStates(state.TodosArray)">Toggle all done</button>
-    
-  
+      <transition name="fade">
+      <div class="successModal" v-if="checkArrayIfAllTrue && state.ModalSeen === false" ><h3>You managed to finish all tasks! 🥳</h3><span v-on:click="state.ModalSeen = true">Hide</span></div>
+      </transition>
 </template>
 
 <script>
@@ -30,7 +31,8 @@ export default {
     const state = reactive({
       TodoElement: "",
       TodosArray: [],
-      InputEmpty: null
+      InputEmpty: null,
+      ModalSeen: false
     })
     const isInputEmpty = computed(() => state.InputEmpty);
     const checkArrayIfAllTrue = computed(() => {
@@ -240,6 +242,25 @@ export default {
     padding: 10px 20px;
     margin-top: 40px;
 
+  }
+}
+.successModal{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(18, 18, 18,0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h3{
+    font-size: 3rem;
+  }
+  span{
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 50px;
+    text-transform: lowercase;
   }
 }
 </style>

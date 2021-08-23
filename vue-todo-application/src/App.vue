@@ -1,20 +1,20 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <TodoInterface />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TodoInterface from './components/TodoInterface.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TodoInterface
   }
 }
 </script>
 
-<style>
+<style >
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

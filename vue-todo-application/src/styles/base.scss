@@ -3,3 +3,17 @@
     margin: 0;
     box-sizing: border-box;
 }
+$color900: #23036a;
+$color800: #30009c;
+$color700: #3700b3;
+$color600: #5600e8;
+$color500: #6200ee;
+$color400: #7f39fb;
+$color300: #985eff;
+$color200: #bb86fc;
+$color100: #dbb2ff;
+$color50: #f2e7fe;
+body{
+    background: #121212;
+    color: $color50;
+}

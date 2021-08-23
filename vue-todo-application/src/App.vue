@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <h1>To Do App </h1>
   <TodoInterface />
 </template>
 
@@ -14,13 +14,19 @@ export default {
 }
 </script>
 
-<style >
+<style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  h1{
+    font-family: Poppins;
+    text-transform: uppercase;
+    font-size: 3em;
+    text-shadow: 3px 3px #9465F7;
+
+  }
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
   margin-top: 60px;
 }
 </style>

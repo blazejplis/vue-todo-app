@@ -1,14 +1,19 @@
 <template>
   <div class="main">
     <form @submit.prevent="addTodo">
-      <label for="newTodo">Add new todo element</label>
+      <h2 for="newTodo">Add new todo element</h2>
+      <div>
       <input placeholder="Enter new todo element here" type="text" name="newTodo" v-model="state.TodoElement">
       <button>Add</button>
+      <div v-if="isInputEmpty">You need to fill this field to add todo element!</div>
+      </div>
     </form>
       <ul class="todo-list">
+        <div v-if="!state.TodosArray.length" class="todo-list__nothing-to-do">Congrats you have nothing to do! 🎉</div>
+        <h2 v-if="state.TodosArray.length" class="todo-list__nothing-to-do">Here is your to-do list:</h2>
         <li v-for="(todo, index) in state.TodosArray" :key="todo.id" >
           <div class="todo-list__radio" :class="{ done: todo.done }" @click="toggleDone(todo)"></div>
-          <span contenteditable="true">{{todo.content}}</span>
+          <span contenteditable="true" @input="handleExisitngTodoInput(todo,index)">{{todo.content}}</span>
           <button @click="removeTodo(index)">Delete this todo</button>
         </li>
       </ul>
@@ -19,53 +24,72 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import {reactive,computed} from 'vue';
 export default {
   name: 'TodoInterface',
-  setup(){
+  setup() {
     const state = reactive({
-        TodoElement: "",
-        TodosArray: [],
+      TodoElement: "",
+      TodosArray: [],
+      InputEmpty: null
     })
-
-    function addTodo(){
-      if(state.TodoElement){
-      state.TodosArray.push({
-        id: Date.now(),
-        done: false,
-        content: state.TodoElement
-      });
-      state.TodoElement = "";
+    const isInputEmpty = computed(() => state.InputEmpty)
+    const checkArrayIfAllTrue = computed(() => state.TodosArray.every(e => e === true));
+    function addTodo() {
+      if (state.TodoElement) {
+        state.TodosArray.push({
+          id: Date.now(),
+          done: false,
+          content: state.TodoElement
+        });
+        state.TodoElement = "";
+        state.InputEmpty = false;
+      } else {
+        state.InputEmpty = true;
       }
     }
-      function toggleDone(todo){
-          todo.done = !todo.done;
+
+    function toggleDone(todo) {
+      todo.done = !todo.done;
+    }
+
+    function removeTodo(index) {
+      state.TodosArray.splice(index, 1);
+    }
+
+
+    function handleExisitngTodoInput(todo,index){
+
+      todo.content = event.target.innerText;
+      if(todo.content == ""){
+        state.TodosArray.splice(index, 1);
       }
-      function removeTodo(index){
-          state.TodosArray.splice(index,1);
+    }
+
+    function toggleAllStates() {
+      //why it doesn't work????
+      console.log(checkArrayIfAllTrue.value)
+      if (checkArrayIfAllTrue.value) {
+        state.TodosArray.forEach(element => {
+          element.done = false;
+        });
+      } else {
+        state.TodosArray.forEach(element => {
+          element.done = true;
+        });
       }
-      
-      function toggleAllStates(){
-        //why it doesn't work????
-        console.log(state.TodosArray.every(e => e))
-        if(state.TodosArray.every(e => e)){
-          state.TodosArray.forEach(element => {
-              element.done = false ;
-          });
-        }
-        else{
-          state.TodosArray.forEach(element => {
-              element.done = true;
-          });
-        }
-      }
-      return{
-        state,
-        addTodo,
-        toggleDone,
-        removeTodo,
-        toggleAllStates
-      }
+    }
+    return {
+
+      state,
+      isInputEmpty,
+      checkArrayIfAllTrue,
+      addTodo,
+      toggleDone,
+      removeTodo,
+      handleExisitngTodoInput,
+      toggleAllStates
+    }
   }
 }
 </script>
@@ -82,16 +106,18 @@ export default {
     display: flex;
   flex-direction: column;
   form{
-  width: 100%;
-  padding: 50px;
+  @include component-base;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #1d1d1d;
-  border-radius: 10px;
+  h2{
+    margin-bottom: 5px;
+    
+  }
   input[type=text]{
-    padding: 10px;
+    padding: 10px 40px;
+    text-align: center;
     border-radius: 5px;
     outline: none;
     border: none;
@@ -99,33 +125,47 @@ export default {
     font-family: Poppins;
     font-size: .95em;
     &:focus{
-      border: 2px solid #30009c;
+      border: 2px solid $color800;
     }
   }
   button{
-    padding: 15px 20px;
-    
+    padding: 15px 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: $color300;
+    color: $color50;
+    text-transform: uppercase;
+    font-weight: 800;
+    cursor: pointer;
+    margin-left: 10px;
   }
   } 
-}
+
 
 ul {
   list-style: none;
+  margin-top: 50px;
   width: 100%;
+  background-color: $grey-component;
+  @include component-base;
+      .todo-list__nothing-to-do{
+      font-size: 1.2em;
+    }
   li{
     display: flex;
     flex-direction: row;
     width: 100%;
+
     .todo-list__radio{
-      width:25px;
-      height: 25px;
+      width:35px;
+      height: 35px;
       border-radius: 50%;
-      border: 1px solid #7A3EFA;
-      background-color: rgba(210, 255, 40,0.4);
+      
+      background-color: rgba(219, 178, 255, 0.3);
       cursor: pointer;
     }
     .done{
-      background-color: rgba(210, 255, 40,1);
+      background-color: $color800;
     }
   }
   span{
@@ -136,5 +176,5 @@ ul {
   cursor: pointer;
 
 }
-
+}
 </style>

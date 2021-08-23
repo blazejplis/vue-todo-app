@@ -13,7 +13,23 @@ $color300: #985eff;
 $color200: #bb86fc;
 $color100: #dbb2ff;
 $color50: #f2e7fe;
+
+$grey-component: #1d1d1d;
+$grey-background: #121212;
+@mixin component-base {
+    background-color: $grey-component;
+    border-radius: 10px;
+    padding: 50px 40px;
+    width: 100%;
+}
 body{
-    background: #121212;
+    background: $grey-background;
     color: $color50;
+}
+a,p,span,h1,h2,h3,h4,h5,h6,button,div,input{
+    &::selection{
+        background-color: $color900;
+        color: white;
+        
+    }
 }
